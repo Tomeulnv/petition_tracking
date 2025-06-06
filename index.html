@@ -40,22 +40,18 @@
 
       const appsScriptURL = "https://script.google.com/macros/s/AKfycbx_4LEKt9zRkcUmCWUHLsB-y06umnr4wcY9GF3jTeW3ItwIlCOuOpJovSwrDdbrxku4/exec";
 
-      const payload = { ip, ua, loc, ref, deviceType, browser };
+      const params = new URLSearchParams({ ip, ua, loc, ref, deviceType, browser });
 
       try {
-        const response = await fetch(appsScriptURL, {
-          method: "POST",
-          body: JSON.stringify(payload),
-          headers: { "Content-Type": "application/json" }
-        });
-        const text = await response.text();
-        console.log("Logging response:", text);
+        await fetch(`${appsScriptURL}?${params.toString()}`);
       } catch (e) {
         console.error("Logging failed:", e);
       }
 
-      // Redirect after logging
-      window.location.href = "https://attivati.legambiente.it/page/138932/petition/1?ea.tracking.id=unibo";
+      // Delay just a little to ensure fetch completes before redirect
+      setTimeout(() => {
+        window.location.href = "https://attivati.legambiente.it/page/138932/petition/1?ea.tracking.id=unibo";
+      }, 300);
     }
 
     logAndRedirect();
