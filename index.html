@@ -38,10 +38,9 @@
       const loc = window.location.href;
       const {deviceType, browser, ua} = getDeviceAndBrowser();
 
-      // Replace this URL with your actual Apps Script URL
+      // TODO: Replace with your deployed Apps Script URL (from Deploy > Web app)
       const appsScriptURL = "https://script.google.com/macros/s/AKfycbyPIqaNeBPxRyA0pb_X0kBaBOkEiFPY8n8tkvREwWAXZDzAUPMf3V3xsn6FTV0bsVlpvQ/exec";
 
-      // Build query params
       const params = new URLSearchParams({
         ip,
         ua,
@@ -52,12 +51,14 @@
       });
 
       try {
-        await fetch(`${appsScriptURL}?${params.toString()}`);
+        const response = await fetch(`${appsScriptURL}?${params.toString()}`);
+        const text = await response.text();
+        console.log("Logging response:", text);
       } catch (e) {
-        // ignore errors silently
+        console.error("Logging failed:", e);
       }
 
-      // Redirect user to the final destination
+      // Redirect to the final petition URL
       window.location.href = "https://attivati.legambiente.it/page/138932/petition/1?ea.tracking.id=unibo";
     }
 
