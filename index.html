@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirecting...</title>
+</head>
+<body>
+  <p>Redirecting, please wait...</p>
+  <script>
+    async function getVisitorIP() {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip || "unknown";
+      } catch (e) {
+        return "unknown";
+      }
+    }
+
+    function getDeviceAndBrowser() {
+      const ua = navigator.userAgent.toLowerCase();
+      let deviceType = "Desktop";
+      if (/mobile|iphone|android|blackberry|phone/.test(ua)) deviceType = "Mobile";
+      else if (/ipad|tablet/.test(ua)) deviceType = "Tablet";
+
+      let browser = "Unknown";
+      if (ua.indexOf("chrome") > -1) browser = "Chrome";
+      else if (ua.indexOf("firefox") > -1) browser = "Firefox";
+      else if (ua.indexOf("safari") > -1 && ua.indexOf("chrome") === -1) browser = "Safari";
+      else if (ua.indexOf("edge") > -1) browser = "Edge";
+      else if (ua.indexOf("opera") > -1 || ua.indexOf("opr") > -1) browser = "Opera";
+
+      return {deviceType, browser, ua: navigator.userAgent};
+    }
+
+    async function logAndRedirect() {
+      const ip = await getVisitorIP();
+      const ref = document.referrer || "direct";
+      const loc = window.location.href;
+      const {deviceType, browser, ua} = getDeviceAndBrowser();
+
+      // Replace this URL with your actual Apps Script URL
+      const appsScriptURL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+
+      // Build query params
+      const params = new URLSearchParams({
+        ip,
+        ua,
+        loc,
+        ref,
+        deviceType,
+        browser
+      });
+
+      try {
+        await fetch(`${appsScriptURL}?${params.toString()}`);
+      } catch (e) {
+        // ignore errors silently
+      }
+
+      // Redirect user to the final destination
+      window.location.href = "https://attivati.legambiente.it/page/138932/petition/1?ea.tracking.id=unibo";
+    }
+
+    logAndRedirect();
+  </script>
+</body>
+</html>
