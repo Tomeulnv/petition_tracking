@@ -1,55 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Redirecting...</title>
-</head>
-<body>
-  <p>Redirecting, please wait...</p>
   <script>
-    async function trackAndRedirect() {
+    async function logAndRedirect() {
+      const userAgent = navigator.userAgent;
+      const referrer = document.referrer || "Direct";
+      const deviceType = /Mobi|Android/i.test(userAgent) ? "Mobile" : "Desktop";
+      const browser = (() => {
+        if (userAgent.includes("Chrome") && !userAgent.includes("Edg")) return "Chrome";
+        if (userAgent.includes("Firefox")) return "Firefox";
+        if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) return "Safari";
+        if (userAgent.includes("Edg")) return "Edge";
+        return "Other";
+      })();
+
+      const logData = {
+        timestamp: new Date().toISOString(),
+        userAgent,
+        referrer,
+        deviceType,
+        browser
+      };
+
       try {
-        const ipResponse = await fetch('https://api.ipify.org?format=json');
-        const ipData = await ipResponse.json();
-
-        const userAgent = navigator.userAgent;
-        const referrer = document.referrer || 'Direct';
-        const deviceType = /Mobi|Android/i.test(userAgent) ? "Mobile" : "Desktop";
-        const browser = (() => {
-          if (userAgent.includes("Firefox")) return "Firefox";
-          if (userAgent.includes("Edg")) return "Edge";
-          if (userAgent.includes("Chrome")) return "Chrome";
-          if (userAgent.includes("Safari")) return "Safari";
-          return "Other";
-        })();
-
-        const locationResponse = await fetch('https://ipapi.co/json/');
-        const locationData = await locationResponse.json();
-        const location = `${locationData.city || ''}, ${locationData.region || ''}, ${locationData.country_name || ''}`;
-
-        const payload = {
-          ip: ipData.ip || 'Unknown',
-          userAgent,
-          referrer,
-          deviceType,
-          browser,
-          location
-        };
-
-        await fetch('https://script.google.com/macros/s/AKfycbx_4LEKt9zRkcUmCWUHLsB-y06umnr4wcY9GF3jTeW3ItwIlCOuOpJovSwrDdbrxku4/exec', {
-          method: 'POST',
-          body: JSON.stringify(payload),
-          headers: { 'Content-Type': 'application/json' }
+        await fetch("https://script.google.com/macros/s/AKfycbz6NjmdYZ5kJDUQ14lUIxaQabTKMLNAFiOsTBEWfMJEZ3NbfCty9yw4Zx8dttmD1nlA/exec", {  // <-- Replace this
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(logData)
         });
       } catch (err) {
-        console.error("Tracking failed", err);
-      } finally {
-        window.location.href = 'https://attivati.legambiente.it/page/138932/petition/1?ea.tracking.id=unibo';
+        console.warn("Logging failed:", err);
       }
+
+      // Redirect to the actual petition page
+      window.location.href = "https://attivati.legambiente.it/page/138932/petition/1?ea.tracking.id=unibo";
     }
 
-    trackAndRedirect();
+    window.onload = logAndRedirect;
   </script>
+</head>
+<body>
+  <p>Redirecting to the petition...</p>
 </body>
 </html>
