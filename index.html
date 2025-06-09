@@ -37,18 +37,20 @@
       };
 
       try {
-        await fetch("https://script.google.com/macros/s/AKfycbz6NjmdYZ5kJDUQ14lUIxaQabTKMLNAFiOsTBEWfMJEZ3NbfCty9yw4Zx8dttmD1nlA/exec", {
+        await fetch("https://script.google.com/macros/s/AKfycbxHnggvsKgn7HAfPbfhYSCFFGoYGKH86EIlSetxRqYHOoOUiRcxcDH0AHBr7PJIDQub/exec", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(logData)
+          body: JSON.stringify(logData),
+          mode: "no-cors"  // allows fetch to succeed silently
         });
       } catch (err) {
         console.warn("Logging failed:", err);
       }
 
+      // Delay redirect slightly to allow logging
       setTimeout(() => {
         window.location.href = "https://attivati.legambiente.it/page/138932/petition/1?ea.tracking.id=unibo";
-      }, 1500); // Wait 1.5 seconds before redirect
+      }, 1500);
     }
   </script>
 </head>
