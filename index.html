@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Redirect to Petition</title>
   <style>
     body {
@@ -37,20 +37,18 @@
       };
 
       try {
-        await fetch("https://script.google.com/macros/s/AKfycbxHnggvsKgn7HAfPbfhYSCFFGoYGKH86EIlSetxRqYHOoOUiRcxcDH0AHBr7PJIDQub/exec", {
+        await fetch("https://petition-tracker-backend-8d01de674b9f.herokuapp.com/track-click", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(logData),
-          mode: "no-cors"  // allows fetch to succeed silently
         });
       } catch (err) {
         console.warn("Logging failed:", err);
       }
 
-      // Delay redirect slightly to allow logging
       setTimeout(() => {
         window.location.href = "https://attivati.legambiente.it/page/138932/petition/1?ea.tracking.id=unibo";
-      }, 1500);
+      }, 1000);
     }
   </script>
 </head>
