@@ -2,7 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Redirecting...</title>
+  <title>Redirect to Petition</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 100px;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
   <script>
     async function logAndRedirect() {
       const userAgent = navigator.userAgent;
@@ -25,7 +37,7 @@
       };
 
       try {
-        await fetch("https://script.google.com/macros/s/AKfycbz6NjmdYZ5kJDUQ14lUIxaQabTKMLNAFiOsTBEWfMJEZ3NbfCty9yw4Zx8dttmD1nlA/exec", {  // <-- Replace this
+        await fetch("https://script.google.com/macros/s/AKfycbz6NjmdYZ5kJDUQ14lUIxaQabTKMLNAFiOsTBEWfMJEZ3NbfCty9yw4Zx8dttmD1nlA/exec", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(logData)
@@ -34,14 +46,15 @@
         console.warn("Logging failed:", err);
       }
 
-      // Redirect to the actual petition page
-      window.location.href = "https://attivati.legambiente.it/page/138932/petition/1?ea.tracking.id=unibo";
+      setTimeout(() => {
+        window.location.href = "https://attivati.legambiente.it/page/138932/petition/1?ea.tracking.id=unibo";
+      }, 1500); // Wait 1.5 seconds before redirect
     }
-
-    window.onload = logAndRedirect;
   </script>
 </head>
 <body>
-  <p>Redirecting to the petition...</p>
+  <h1>Sign the Petition</h1>
+  <p>Click the button below to continue:</p>
+  <button onclick="logAndRedirect()">Go to Petition</button>
 </body>
 </html>
